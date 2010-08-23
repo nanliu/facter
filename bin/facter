@@ -6,7 +6,7 @@
 #
 # = Usage
 #
-#   facter [-d|--debug] [-h|--help] [-p|--puppet] [-v|--version] [-y|--yaml] [fact] [fact] [...]
+#   facter [-d|--debug] [-h|--help] [-p|--puppet] [-v|--version] [-y|--yaml] [-t|--timing] [fact] [fact] [...]
 #
 # = Description
 #
@@ -20,6 +20,9 @@
 #
 # debug::
 #   Enable debugging.
+#
+# timing::
+#   Enable timing.
 #
 # help::
 #   Print this help message
@@ -71,7 +74,8 @@ def load_puppet
     end
 end
 
-$debug = 0
+$debug  = 0
+$timing = 0
 
 config = nil
 
@@ -79,6 +83,7 @@ result = GetoptLong.new(
     [ "--version", "-v", GetoptLong::NO_ARGUMENT       ],
     [ "--help",    "-h", GetoptLong::NO_ARGUMENT       ],
     [ "--debug",   "-d", GetoptLong::NO_ARGUMENT       ],
+    [ "--timing",  "-t", GetoptLong::NO_ARGUMENT       ],
     [ "--yaml",    "-y", GetoptLong::NO_ARGUMENT       ],
     [ "--config",  "-c", GetoptLong::REQUIRED_ARGUMENT ],
     [ "--puppet",  "-p", GetoptLong::NO_ARGUMENT       ]
@@ -104,6 +109,8 @@ begin
             options[:yaml] = true
         when "--debug"
             Facter.debugging(1)
+        when "--timing"
+            Facter.timing(1)
         when "--help"
             if $haveusage
                 RDoc::usage && exit
